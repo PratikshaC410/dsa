@@ -1,3 +1,12 @@
+// Today, Sakurako was studying arrays. An array a
+//  of length n
+//  is considered good if and only if: the array a
+//  is increasing, meaning ai−1<ai
+//  for all 2≤i≤n
+// the differences between adjacent elements are increasing, meaning ai−ai−1<ai+1−ai for all 2≤i<n
+// Sakurako has come up with boundaries l
+//  and r and wants to construct a good array of maximum length, where l≤ai≤r for all ai
+// Help Sakurako find the maximum length of a good array for the given l and r
 #include <bits/stdc++.h>
 using namespace std;
 
