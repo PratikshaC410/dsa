@@ -3,6 +3,8 @@ using namespace std;
 
 int main()
 {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
 
     int t;
     cin >> t;
@@ -18,7 +20,14 @@ int main()
             cin >> u >> v;
         }
 
-        cout << __lg(n) << "\n";
+        int ans = __lg(n);
+
+        if ((1LL << ans) == n)
+        {
+            ans--;
+        }
+
+        cout << ans << "\n";
     }
 
     return 0;
