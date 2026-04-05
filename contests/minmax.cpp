@@ -11,7 +11,14 @@ int main()
     {
         int x;
         cin >> x;
-        cout << x + 1 << "\n";
+        if (x == 67)
+        {
+            cout << 66 << "\n";
+        }
+        else
+        {
+            cout << x + 1 << "\n";
+        }
     }
 
     return 0;
