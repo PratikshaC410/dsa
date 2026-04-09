@@ -11,23 +11,34 @@ int main()
     {
         int n;
         cin >> n;
+        vector<int> a(n);
 
-        int zero_count = 0, one_count = 0;
         for (int i = 0; i < n; i++)
         {
-            int x;
-            cin >> x;
-            if (x == 0)
+            cin >> a[i];
+        }
+        int blocks = 0;
+        bool in_block = false;
+        for (int i = 0; i < n; i++)
+        {
+            if (a[i] == 1)
             {
-                zero_count++;
+                if (!in_block)
+                {
+                    blocks++;
+                    in_block = true;
+                }
             }
             else
             {
-                one_count++;
+                in_block = false;
             }
         }
 
-        if (one_count >= zero_count)
+        bool starts_with_zero = (a[0] == 0);
+        bool ends_with_zero = (a[n - 1] == 0);
+
+        if (blocks % 2 == 1 && !(starts_with_zero && ends_with_zero))
         {
             cout << "Alice\n";
         }
