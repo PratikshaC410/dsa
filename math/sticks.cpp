@@ -7,29 +7,30 @@ using namespace std;
 void solve()
 {
     int n;
-    cin >> n;
+    if (!(cin >> n))
+        return;
     string s;
     cin >> s;
 
     int L = 1, R = n;
     vector<int> a(n);
 
-    for (int i = 0; i < n - 1; i++)
+    for (int i = n - 2; i >= 0; i--)
     {
         if (s[i] == '<')
         {
-            // Next stick must be smaller than all previous.
-            //  place the current largest available number.
-            a[i] = R--;
+            // a[i+1] must be smaller than everything before it.
+            a[i + 1] = L++;
         }
         else
         {
-            // Next stick must be larger than all previous.
-            //  place the current smallest available number.
-            a[i] = L++;
+            // a[i+1] must be larger than everything before it.
+            a[i + 1] = R--;
         }
     }
-    a[n - 1] = L;
+
+    // The only remaining number is for the first position.
+    a[0] = L;
 
     for (int i = 0; i < n; i++)
     {
@@ -40,6 +41,7 @@ void solve()
 
 int main()
 {
+
     int t;
     cin >> t;
     while (t--)
