@@ -14,6 +14,7 @@ int main()
         cin >> n >> s;
 
         int totalStudents = 0;
+
         for (char c : s)
         {
             if (c == '1')
@@ -32,18 +33,21 @@ int main()
                 }
                 int gapLen = i - gapStart;
 
-                bool isLeading = (gapStart == 0);
-                bool isTrailing = (i == n);
+                bool hasLeftNeighbor = (gapStart > 0 && s[gapStart - 1] == '1');
+                bool hasRightNeighbor = (i < n && s[i] == '1');
+                bool isMiddleGap = hasLeftNeighbor && hasRightNeighbor;
 
-                if (isLeading || isTrailing)
+                int toAdd;
+                if (isMiddleGap)
                 {
-                    totalStudents += gapLen / 2;
+                    toAdd = (gapLen - 1) / 2;
                 }
                 else
                 {
-
-                    totalStudents += (gapLen + 1) / 2;
+                    toAdd = max(1, gapLen / 2);
                 }
+
+                totalStudents += toAdd;
             }
             else
             {
