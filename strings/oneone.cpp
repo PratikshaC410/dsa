@@ -11,9 +11,7 @@ void solve()
     string s;
     cin >> s;
 
-    // Phase 1: Bridge all possible gaps.
-    // If we have 101, we can turn it into 111.
-    // This allows us to reach the "Maximum" state.
+    // 1. Maximize: Fill all 101 -> 111
     bool changed = true;
     while (changed)
     {
@@ -28,38 +26,27 @@ void solve()
         }
     }
 
-    // The string 's' is now in its "Maximum" possible configuration.
+    // Calculate Max
     int max_ones = 0;
     for (char c : s)
         if (c == '1')
             max_ones++;
 
-    // Phase 2: For the Minimum, we take that maximum configuration
-    // and turn every '111' into '101' greedily.
-    // This is equivalent to picking every other 1 in a contiguous block.
+    // 2. Minimize: From the maximized string, reduce blocks
     int min_ones = 0;
     for (int i = 0; i < n; i++)
     {
         if (s[i] == '1')
         {
-            min_ones++;
-            // If we keep this 1, and the next one is also a 1,
-            // we can potentially turn the NEXT one into a 0
-            // IF it has a 1 after it.
-            // A simpler way: in a block of length L, min 1s = (L+1)/2
             int j = i;
             while (j < n && s[j] == '1')
                 j++;
 
-            int block_len = j - i;
-            if (block_len > 1)
-            {
-                // Correct for the range: (length + 1) / 2
-                // We subtract the 1 we already added and add the formula
-                min_ones--;
-                min_ones += (block_len + 1) / 2;
-            }
-            i = j; // Skip to the end of this block
+            int L = j - i;
+            // The formula: You can remove (L-1)/2 ones from a block of length L
+            min_ones += (L - (L - 1) / 2);
+
+            i = j - 1; // Move iterator to end of block
         }
     }
 
