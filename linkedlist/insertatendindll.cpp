@@ -36,5 +36,6 @@ void insertAtEnd(Node *&head, int val)
         curr = curr->next;
     }
     curr->next = newnode;
+    newnode->prev = curr;
     retunr head;
 }
