@@ -1,18 +1,13 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
 
 using namespace std;
 
 void solve()
 {
     int n;
-    cin >> n;
-    vector<int> a(n);
-    for (int i = 0; i < n; i++)
-    {
-        cin >> a[i];
-    }
+    if (!(cin >> n))
+        return;
 
     int operations = 0;
     int current_max = -1;
@@ -21,26 +16,32 @@ void solve()
     {
         int val;
         cin >> val;
+
+        // The core logic:
+        // If the number is greater than or equal to our current max,
+        // it will be a "rightmost maximum" in some step of the process.
         if (val >= current_max)
-        { // Must be >= to catch the rightmost maximums
+        {
             current_max = val;
             operations++;
         }
     }
-
-    cout << operations << endl;
+    cout << operations << "\n";
 }
 
 int main()
 {
+    // Fast I/O
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
 
     int t;
-    cin >> t;
-    while (t--)
+    if (cin >> t)
     {
-        solve();
+        while (t--)
+        {
+            solve();
+        }
     }
     return 0;
 }
