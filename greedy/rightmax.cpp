@@ -19,10 +19,11 @@ void solve()
 
     for (int i = 0; i < n; i++)
     {
-        if (a[i] > current_max)
-        {
-
-            current_max = a[i];
+        int val;
+        cin >> val;
+        if (val >= current_max)
+        { // Must be >= to catch the rightmost maximums
+            current_max = val;
             operations++;
         }
     }
