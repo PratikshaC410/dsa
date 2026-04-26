@@ -1,62 +1,70 @@
 #include <iostream>
 #include <vector>
-
+#include <bits/std++.h>
 using namespace std;
+
+/**
+ * Problem Logic:
+ * A sofa can be ordered if and only if it is the FIRST sofa in the list
+ * that is less than or equal to the customer's budget.
+ * * Therefore, a sofa at index i is ONLY reachable if its price is strictly
+ * lower than the minimum price of all sofas appearing before it.
+ */
 
 void solve()
 {
     int n;
-    cin >> n;
+    if (!(cin >> n))
+        return;
+
     vector<int> a(n);
     for (int i = 0; i < n; i++)
     {
         cin >> a[i];
     }
 
+    // If there's no sofa, nothing to report
     if (n == 0)
-    {
-        cout << 0 << endl
-             << endl;
         return;
-    }
 
     vector<int> impossible_indices;
     int current_min = a[0];
 
-    // Check each sofa starting from the second one
+    // The first sofa (index 1) is always reachable with budget m = a[0]
+    // We check every sofa from the second one (index 1 in 0-based array)
     for (int i = 1; i < n; i++)
     {
-        if (a[i] >= current_min)
+        // Since prices are unique, if a[i] is greater than current_min,
+        // it's shielded. Even if they weren't unique, >= would apply.
+        if (a[i] > current_min)
         {
-            // This sofa is "shielded" by a cheaper or equal-priced
-            // sofa that appeared earlier in the list.
-            impossible_indices.push_back(i + 1); // 1-based indexing
+            impossible_indices.push_back(i + 1); // Store 1-based index
         }
         else
         {
-            // This sofa becomes the new price floor
+            // New minimum price found; this sofa is reachable!
             current_min = a[i];
         }
     }
 
-    // Output the count
-    cout << impossible_indices.size() << endl;
-
-    // Output the indices
+    // Output results for this test case
+    cout << impossible_indices.size() << "\n";
     for (int i = 0; i < impossible_indices.size(); i++)
     {
         cout << impossible_indices[i] << (i == impossible_indices.size() - 1 ? "" : " ");
     }
-    cout << endl;
+    cout << "\n";
 }
 
 int main()
 {
+    // Standard CP optimization for faster I/O
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
 
     int t;
-    cin >> t;
+    if (!(cin >> t))
+        return 0;
     while (t--)
     {
         solve();
