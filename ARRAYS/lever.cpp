@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
 
 using namespace std;
 
@@ -17,16 +16,18 @@ void solve()
     for (int i = 0; i < n; i++)
         cin >> b[i];
 
-    ll total_iterations = 0;
+    ll surplus = 0;
     for (int i = 0; i < n; i++)
     {
         if (a[i] > b[i])
         {
-            total_iterations += (a[i] - b[i]);
+            surplus += (a[i] - b[i]);
         }
     }
 
-    cout << total_iterations << endl;
+    // The total iterations is the surplus plus the 1 iteration
+    // where it realizes it can no longer decrease anything.
+    cout << surplus + 1 << endl;
 }
 
 int main()
