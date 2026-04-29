@@ -26,15 +26,15 @@ void solve()
     }
 
     long long pool = total_sum - max_val;
-    long long num_transfers = pool / x;
-    long long total_fees = num_transfers * (x - y);
 
-    cout << total_sum - total_fees << endl;
+    long long num_transfers = pool / x;
+    long long total_lost = num_transfers * (x - y);
+
+    cout << total_sum - total_lost << endl;
 }
 
 int main()
 {
-    // Optimization for faster I/O
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
 
