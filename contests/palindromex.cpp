@@ -15,58 +15,50 @@ void solve()
         cin >> x;
         pos[x].push_back(i);
     }
-
-    int ans = 1;
+    int max_mex = 1;
 
     int L = pos[0][0], R = pos[0][1];
 
     for (int i = 1; i < n; i++)
     {
-        if (pos[i][0] > L && pos[i][0] < R)
-            ans = max(ans, 2);
-        if (pos[i][1] > L && pos[i][1] < R)
-            ans = max(ans, 2);
-    }
-
-    int current_L = L, current_R = R;
-    int k = 1;
-    while (k < n)
-    {
-        int p1 = pos[k][0], p2 = pos[k][1];
-
-        if (p1 < current_L && p2 > current_R)
+        if ((pos[i][0] > L && pos[i][0] < R) || (pos[i][1] > L && pos[i][1] < R))
         {
-            if (current_L - p1 == p2 - current_R)
-            {
-                current_L = p1;
-                current_R = p2;
-                k++;
-
-                ans = max(ans, k);
-            }
-            else
-                break;
+            max_mex = max(max_mex, 2);
+        }
+    }
+    int current_k = 1;
+    while (current_k < n)
+    {
+        int p1 = pos[current_k][0], p2 = pos[current_k][1];
+        if (p1 < L && p2 > R && (L - p1 == p2 - R))
+        {
+            L = p1;
+            R = p2;
+            current_k++;
+            max_mex = max(max_mex, current_k);
         }
         else
-            break;
-    }
-
-    if (k < n)
-    {
-        if ((pos[k][0] > current_L && pos[k][0] < current_R) ||
-            (pos[k][1] > current_L && pos[k][1] < current_R))
         {
-            ans = max(ans, k + 1);
+            break;
         }
     }
 
-    cout << ans << endl;
+    if (current_k < n)
+    {
+        if ((pos[current_k][0] > L && pos[current_k][0] < R) ||
+            (pos[current_k][1] > L && pos[current_k][1] < R))
+        {
+            max_mex = max(max_mex, current_k + 1);
+        }
+    }
+
+    cout << max_mex << "\n";
 }
 
 int main()
 {
     ios::sync_with_stdio(false);
-    cin.tie(nullptr);
+    cin.tie(NULL);
     int t;
     cin >> t;
     while (t--)
