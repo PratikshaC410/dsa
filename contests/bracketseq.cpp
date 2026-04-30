@@ -1,7 +1,5 @@
 #include <iostream>
 #include <string>
-#include <vector>
-#include <algorithm>
 
 using namespace std;
 
@@ -43,7 +41,7 @@ void solve()
         }
     }
 
-    //  it's already an RBS
+    //   already balanced
     if (L == -1)
     {
         cout << "YES" << endl;
