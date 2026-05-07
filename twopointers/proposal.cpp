@@ -6,7 +6,8 @@ using namespace std;
 void solve()
 {
     int n;
-    cin >> n;
+    if (!(cin >> n))
+        return; // Safety check for end of file
     vector<long long> a(n), b(n);
     for (int i = 0; i < n; i++)
         cin >> a[i];
@@ -16,7 +17,6 @@ void solve()
     for (int k = 0; k <= n; k++)
     {
         bool possible = true;
-
         for (int i = 0; i < n - k; i++)
         {
             if (a[i] > b[i + k])
@@ -28,7 +28,7 @@ void solve()
 
         if (possible)
         {
-            cout << k << endl;
+            cout << k << "\n";
             return;
         }
     }
@@ -39,7 +39,8 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     int t;
-    cin >> t;
+    if (!(cin >> t))
+        return 0;
     while (t--)
     {
         solve();
