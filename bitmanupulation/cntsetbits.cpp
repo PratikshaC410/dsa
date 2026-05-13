@@ -6,7 +6,7 @@ class Solution
 public:
     int countSetBits(int n)
     {
-        int count = 0;
+        int cnt = 0;
 
         while (n > 0)
         {
@@ -14,7 +14,7 @@ public:
             n >>= 1;
         }
 
-        return count;
+        return cnt;
     }
 };
 
