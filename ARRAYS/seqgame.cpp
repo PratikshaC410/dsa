@@ -14,20 +14,23 @@ int main()
         int n;
         cin >> n;
 
+        vector<int> a(n);
+
         map<int, int> freq;
+
+        bool ok = false;
 
         for (int i = 0; i < n; i++)
         {
-            int x;
-            cin >> x;
-            freq[x]++;
+            cin >> a[i];
+
+            freq[a[i]]++;
+
+            if (freq[a[i]] >= 2)
+                ok = true;
         }
 
-        int mx = 0;
-        for (auto &[v, f] : freq)
-            mx = max(mx, f);
-
-        if (mx <= (n + 1) / 2)
+        if (ok)
             cout << "YES\n";
         else
             cout << "NO\n";
