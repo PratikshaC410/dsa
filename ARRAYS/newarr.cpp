@@ -1,104 +1,74 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+vector<int> ans;
+vector<int> used;
 int n;
-vector<int> result;
-vector<int> used_count;
-vector<int> first_pos;
 
 bool backtrack(int pos)
 {
-    // Base case: filled all positions
-    if (pos == 2 * n)
-    {
-        return true;
-    }
+    // Skip filled positions
+    while (pos < 2 * n && ans[pos] != 0)
+        pos++;
 
-    // Try numbers in descending order (larger numbers first)
+    // All positions filled
+    if (pos == 2 * n)
+        return true;
+
+    // Try larger numbers first
     for (int num = n; num >= 1; num--)
     {
-        if (used_count[num] == 2)
-        {
-            continue; // Already placed twice
-        }
+        if (used[num])
+            continue;
 
-        if (used_count[num] == 0)
+        // Try placing second occurrence at valid positions
+        for (int j = pos + num; j < 2 * n; j += num)
         {
-            // First occurrence of this number
-            result[pos] = num;
-            first_pos[num] = pos;
-            used_count[num] = 1;
+            if (ans[j] != 0)
+                continue;
+
+            ans[pos] = ans[j] = num;
+            used[num] = 1;
 
             if (backtrack(pos + 1))
-            {
                 return true;
-            }
 
-            // Backtrack
-            result[pos] = 0;
-            first_pos[num] = -1;
-            used_count[num] = 0;
-        }
-        else
-        {
-            // Second occurrence - check distance constraint
-            int fp = first_pos[num];
-            int distance = pos - fp;
-
-            // Distance must be divisible by num
-            if (distance % num == 0)
-            {
-                result[pos] = num;
-                used_count[num] = 2;
-
-                if (backtrack(pos + 1))
-                {
-                    return true;
-                }
-
-                // Backtrack
-                result[pos] = 0;
-                used_count[num] = 1;
-            }
+            ans[pos] = ans[j] = 0;
+            used[num] = 0;
         }
     }
 
     return false;
 }
 
-void solve(int test_n)
+void solve()
 {
-    n = test_n;
-    result.assign(2 * n, 0);
-    used_count.assign(n + 1, 0);
-    first_pos.assign(n + 1, -1);
+    cin >> n;
+
+    ans.assign(2 * n, 0);
+    used.assign(n + 1, 0);
 
     backtrack(0);
 
-    // Print result
     for (int i = 0; i < 2 * n; i++)
     {
-        if (i > 0)
-            cout << " ";
-        cout << result[i];
+        if (i)
+            cout << ' ';
+        cout << ans[i];
     }
-    cout << "\n";
+    cout << '\n';
 }
 
 int main()
 {
-    ios_base::sync_with_stdio(false);
+    ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
     int t;
     cin >> t;
 
     while (t--)
-    {
-        int n;
-        cin >> n;
-        solve(n);
-    }
+        solve();
 
     return 0;
 }
