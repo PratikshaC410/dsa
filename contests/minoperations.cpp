@@ -1,84 +1,115 @@
 #include <iostream>
 #include <vector>
-#include <map>
 #include <algorithm>
 
 using namespace std;
+
+long long get_min_ops(long long start, long long target)
+{
+    if (start == target)
+        return 0;
+
+    long long ops = 0;
+    while (start > target)
+    {
+        if (start % 2 == 0)
+        {
+            start /= 2;
+            ops++;
+        }
+        else
+        {
+            if (start + 1 == target)
+            {
+                return ops + 1;
+            }
+            start = (start + 1) / 2;
+            ops += 2;
+        }
+    }
+
+    if (start == target)
+        return ops;
+    if (start % 2 != 0 && start + 1 == target)
+        return ops + 1;
+
+    return -1; // Unreachable
+}
+
+vector<long long> get_all_reachable_states(long long x)
+{
+    vector<long long> states;
+    while (x > 0)
+    {
+        states.push_back(x);
+        if (x == 1)
+            break;
+
+        if (x % 2 != 0)
+        {
+            states.push_back(x + 1);
+            x = (x + 1) / 2;
+        }
+        else
+        {
+            x /= 2;
+        }
+    }
+    return states;
+}
 
 void solve()
 {
     int n;
     cin >> n;
     vector<long long> a(n);
-
-    map<long long, long long> total_steps;
-    map<long long, int> reach_count;
+    bool all_equal = true;
 
     for (int i = 0; i < n; i++)
     {
         cin >> a[i];
-
-        long long x = a[i];
-        long long steps = 0;
-
-        vector<pair<long long, long long>> current_path;
-        current_path.push_back(make_pair(x, steps));
-
-        while (x > 2)
+        if (i > 0 && a[i] != a[i - 1])
         {
-            if (x % 2 == 0)
-            {
-                x /= 2;
-            }
-            else
-            {
-                x += 1;
-            }
-            steps++;
-            current_path.push_back(make_pair(x, steps));
-        }
-
-        if (x == 2)
-        {
-            current_path.push_back(make_pair(1, steps + 1));
-        }
-        else if (x == 1)
-        {
-            current_path.push_back(make_pair(2, steps + 1));
-        }
-
-        sort(current_path.begin(), current_path.end());
-
-        for (size_t j = 0; j < current_path.size(); j++)
-        {
-            if (j == 0 || current_path[j].first != current_path[j - 1].first)
-            {
-                long long val = current_path[j].first;
-                long long cost = current_path[j].second;
-
-                total_steps[val] += cost;
-                reach_count[val]++;
-            }
+            all_equal = false;
         }
     }
 
-    long long min_ops = -1;
-
-    for (map<long long, int>::const_iterator it = reach_count.begin(); it != reach_count.end(); ++it)
+    if (all_equal)
     {
-        long long val = it->first;
-        int count = it->second;
+        cout << 0 << "\n";
+        return;
+    }
 
-        if (count == n)
+    vector<long long> candidates = get_all_reachable_states(a[0]);
+
+    long long ans = -1;
+
+    for (long long target : candidates)
+    {
+        long long total_ops = 0;
+        bool valid = true;
+
+        for (int i = 0; i < n; i++)
         {
-            if (min_ops == -1 || total_steps[val] < min_ops)
+            long long cost = get_min_ops(a[i], target);
+            if (cost == -1)
             {
-                min_ops = total_steps[val];
+                valid = false;
+                break;
+            }
+            total_ops += cost;
+        }
+
+        if (valid)
+        {
+            if (ans == -1 || total_ops < ans)
+            {
+                ans = total_ops;
             }
         }
     }
 
-    cout << min_ops << "\n";
+    cout << ans << "\n";
 }
 
 int main()
