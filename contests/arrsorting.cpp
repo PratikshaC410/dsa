@@ -1,89 +1,150 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
 
-bool canSort(vector<long long>& a, vector<bool>& increase) {
+bool checkMask(vector<long long> &a, vector<bool> &increase)
+{
     int n = a.size();
-    
-    // Find the range of valid k values
     long long min_k = 1;
-    long long max_k = 2e9;
-    
-    for(int i = 1; i < n; i++) {
-        // We need: a[i] + (increase[i] ? k : 0) >= a[i-1] + (increase[i-1] ? k : 0)
-        
-        if(increase[i] && !increase[i-1]) {
-            // a[i] + k >= a[i-1]
-            // k >= a[i-1] - a[i]
-            if(a[i-1] > a[i]) {
-                min_k = max(min_k, a[i-1] - a[i] + 1);
+    long long max_k = 2000000000LL;
+    bool valid = true;
+
+    for (int i = 1; i < n; i++)
+    {
+        if (increase[i] && !increase[i - 1])
+        {
+            long long need = a[i - 1] - a[i];
+            if (need >= 1)
+            {
+                min_k = max(min_k, need);
             }
-        } else if(!increase[i] && increase[i-1]) {
-            // a[i] >= a[i-1] + k
-            // k <= a[i] - a[i-1]
-            max_k = min(max_k, a[i] - a[i-1] - 1);
         }
-        // If both same: a[i] >= a[i-1] must hold
+        else if (!increase[i] && increase[i - 1])
+        {
+            long long limit = a[i] - a[i - 1];
+            max_k = min(max_k, limit);
+        }
+        else if (!increase[i] && !increase[i - 1])
+        {
+            if (a[i] < a[i - 1])
+            {
+                valid = false;
+                break;
+            }
+        }
+        else
+        {
+            if (a[i] < a[i - 1])
+            {
+                valid = false;
+                break;
+            }
+        }
     }
-    
-    if(min_k > max_k || min_k <= 0) return false;
-    
-    long long k = min_k;
-    
-    for(int i = 1; i < n; i++) {
-        long long prev_val = a[i-1] + (increase[i-1] ? k : 0);
-        long long curr_val = a[i] + (increase[i] ? k : 0);
-        if(curr_val < prev_val) return false;
-    }
-    
-    return true;
+
+    return valid && min_k <= max_k && min_k >= 1;
 }
 
-int main(){
+int main()
+{
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    
+
     int t;
     cin >> t;
-    
-    while(t--) {
+
+    while (t--)
+    {
         int n;
         cin >> n;
         vector<long long> a(n);
-        
-        for(int i = 0; i < n; i++) {
+
+        for (int i = 0; i < n; i++)
+        {
             cin >> a[i];
         }
-        
+
         // Check if already sorted
         bool sorted = true;
-        for(int i = 1; i < n; i++) {
-            if(a[i] < a[i-1]) {
+        for (int i = 1; i < n; i++)
+        {
+            if (a[i] < a[i - 1])
+            {
                 sorted = false;
                 break;
             }
         }
-        
-        if(sorted) {
+
+        if (sorted)
+        {
             cout << "Yes\n";
             continue;
         }
-        
+
         bool found = false;
-        
-        // Key insight: Try increasing all elements from position i onwards
-        for(int i = 0; i < n && !found; i++) {
-            vector<bool> increase(n, false);
-            for(int j = i; j < n; j++) {
-                increase[j] = true;
-            }
-            
-            if(canSort(a, increase)) {
-                found = true;
+
+        if (n <= 20)
+        {
+            // Try all 2^n subsets
+            for (int mask = 0; mask < (1 << n); mask++)
+            {
+                vector<bool> increase(n, false);
+                for (int i = 0; i < n; i++)
+                {
+                    if (mask & (1 << i))
+                    {
+                        increase[i] = true;
+                    }
+                }
+
+                if (checkMask(a, increase))
+                {
+                    found = true;
+                    break;
+                }
             }
         }
-        
+        else
+        {
+            // For large n, try different split strategies
+            // Strategy 1: Try increasing suffix starting at each position
+            for (int start = 0; start < n && !found; start++)
+            {
+                vector<bool> increase(n, false);
+                for (int i = start; i < n; i++)
+                {
+                    increase[i] = true;
+                }
+                if (checkMask(a, increase))
+                {
+                    found = true;
+                }
+            }
+
+            // Strategy 2: Try a greedy approach - go left to right and decide
+            if (!found)
+            {
+                for (int first_bad = 0; first_bad < n && !found; first_bad++)
+                {
+                    // Find the first position where a[i] > a[i+1]
+                    if (first_bad == 0 || a[first_bad] < a[first_bad - 1])
+                    {
+                        // Try: increase all elements from first_bad onwards
+                        vector<bool> increase(n, false);
+                        for (int i = first_bad; i < n; i++)
+                        {
+                            increase[i] = true;
+                        }
+                        if (checkMask(a, increase))
+                        {
+                            found = true;
+                        }
+                    }
+                }
+            }
+        }
+
         cout << (found ? "Yes" : "No") << "\n";
     }
-    
+
     return 0;
 }
