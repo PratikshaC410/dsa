@@ -26,15 +26,14 @@ int main()
             cin >> b[i];
         }
 
-        // Sort products in descending order
         sort(a.begin(), a.end(), greater<long long>());
 
-        // Sort vouchers in descending order
         sort(b.begin(), b.end(), greater<int>());
 
         long long total_cost = 0;
         int product_idx = 0;
 
+        // Apply each voucher
         for (int i = 0; i < k && product_idx < n; i++)
         {
             int voucher_value = b[i];
@@ -58,6 +57,7 @@ int main()
             }
         }
 
+        // Add remaining products at full price
         while (product_idx < n)
         {
             total_cost += a[product_idx];
