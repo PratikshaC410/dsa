@@ -26,42 +26,42 @@ int main()
             cin >> b[i];
         }
 
-        sort(a.begin(), a.end(), greater<long long>());
+        // Sort products in ASCENDING order (cheapest first)
+        sort(a.begin(), a.end());
 
+        // Sort vouchers in DESCENDING order (largest first)
         sort(b.begin(), b.end(), greater<int>());
 
         long long total_cost = 0;
-        int product_idx = 0;
+        int idx = 0;
 
         // Apply each voucher
-        for (int i = 0; i < k && product_idx < n; i++)
+        for (int i = 0; i < k && idx < n; i++)
         {
-            int voucher_value = b[i];
+            int voucher_size = b[i];
 
-            if (product_idx + voucher_value <= n)
+            if (idx + voucher_size <= n)
             {
-                for (int j = 0; j < voucher_value - 1; j++)
+                // Skip the cheapest product (index idx), pay for rest
+                idx++; // skip cheapest
+                for (int j = 0; j < voucher_size - 1; j++)
                 {
-                    total_cost += a[product_idx + j];
+                    total_cost += a[idx];
+                    idx++;
                 }
-                product_idx += voucher_value;
             }
             else
             {
-                while (product_idx < n)
-                {
-                    total_cost += a[product_idx];
-                    product_idx++;
-                }
-                break;
+                // Can't use this voucher, move to next
+                continue;
             }
         }
 
-        // Add remaining products at full price
-        while (product_idx < n)
+        // Pay for remaining products
+        while (idx < n)
         {
-            total_cost += a[product_idx];
-            product_idx++;
+            total_cost += a[idx];
+            idx++;
         }
 
         cout << total_cost << "\n";
