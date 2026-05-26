@@ -8,15 +8,19 @@ void solve()
     long long a, b, n;
     cin >> a >> b >> n;
 
-    long long M = a / b;
-
-    if (n <= M)
+    if (n == 1)
     {
-        cout << n << "\n";
+        cout << 1 << "\n";
+        return;
+    }
+
+    if (min(b, a / n) == min(b, a / 1))
+    {
+        cout << 1 << "\n";
     }
     else
     {
-        cout << 1 + M << "\n";
+        cout << 2 << "\n";
     }
 }
 
