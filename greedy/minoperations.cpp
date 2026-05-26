@@ -9,24 +9,41 @@ void solve()
     int n, k;
     cin >> n >> k;
 
-    vector<int> a(n);
-    for (int i = 0; i < n; ++i)
+    vector<int> a(n + 1);
+    for (int i = 1; i <= n; ++i)
     {
         cin >> a[i];
     }
 
     int p;
     cin >> p;
-    int blocks = 1;
-    for (int i = 1; i < n; ++i)
+
+    int left_transitions = 0;
+    for (int i = p - 1; i >= 1; --i)
     {
-        if (a[i] != a[i - 1])
+        if (a[i] != a[i + 1])
         {
-            blocks++;
+            left_transitions++;
         }
     }
 
-    cout << blocks / 2 << "\n";
+    int right_transitions = 0;
+    for (int i = p + 1; i <= n; ++i)
+    {
+        if (a[i] != a[i - 1])
+        {
+            right_transitions++;
+        }
+    }
+
+    int ans = max(left_transitions, right_transitions);
+
+    if (ans % 2 != 0)
+    {
+        ans++;
+    }
+
+    cout << ans << "\n";
 }
 
 int main()
