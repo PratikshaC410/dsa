@@ -1,5 +1,4 @@
 #include <iostream>
-#include <algorithm>
 
 using namespace std;
 
@@ -14,14 +13,19 @@ void solve()
         return;
     }
 
-    if (min(b, a / n) == min(b, a / 1))
+    if (b >= a)
     {
         cout << 1 << "\n";
+        return;
     }
-    else
+
+    if (n * b <= a)
     {
-        cout << 2 << "\n";
+        cout << 1 << "\n";
+        return;
     }
+
+    cout << 2 << "\n";
 }
 
 int main()
