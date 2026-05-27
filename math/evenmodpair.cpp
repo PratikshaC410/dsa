@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -13,17 +14,17 @@ void solve()
         cin >> a[i];
     }
 
-    for (int i = 0; i < n; i++)
+    int limit = min(n, 4);
+
+    for (int i = 0; i < limit; i++)
     {
-        if (i + 1 < n && (a[i + 1] % a[i]) % 2 == 0)
+        for (int j = i + 1; j < limit; j++)
         {
-            cout << a[i] << " " << a[i + 1] << "\n";
-            return;
-        }
-        if (i + 2 < n && (a[i + 2] % a[i]) % 2 == 0)
-        {
-            cout << a[i] << " " << a[i + 2] << "\n";
-            return;
+            if ((a[j] % a[i]) % 2 == 0)
+            {
+                cout << a[i] << " " << a[j] << "\n";
+                return;
+            }
         }
     }
 
