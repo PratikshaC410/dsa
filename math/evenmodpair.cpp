@@ -15,67 +15,28 @@ int main()
         cin >> n;
 
         vector<long long> a(n);
-        vector<long long> even;
-        bool hasOne = false;
-
         for (int i = 0; i < n; i++)
         {
             cin >> a[i];
-            if (a[i] == 1)
-                hasOne = true;
-            if (a[i] % 2 == 0)
-                even.push_back(a[i]);
         }
 
-        if (hasOne)
-        {
-            cout << 1 << " " << a[1] << '\n';
-        }
-        else if (even.size() >= 2)
-        {
-            cout << even[0] << " " << even[1] << '\n';
-        }
-        else
-        {
-            bool found = false;
+        bool found = false;
 
-            if (even.size() == 1)
+        for (int i = 0; i < n && !found; i++)
+        {
+            for (int j = i + 1; j < n && !found; j++)
             {
-                long long y = even[0];
-                for (int i = 0; i < n; i++)
+                if (a[i] < a[j] && (a[j] % a[i]) % 2 == 0)
                 {
-                    if (a[i] < y && (y / a[i]) % 2 == 0)
-                    {
-                        cout << a[i] << " " << y << '\n';
-                        found = true;
-                        break;
-                    }
+                    cout << a[i] << " " << a[j] << '\n';
+                    found = true;
                 }
             }
+        }
 
-            if (!found)
-            {
-                for (int i = 0; i < n; i++)
-                {
-                    if (i + 1 < n && (a[i + 1] % a[i]) % 2 == 0)
-                    {
-                        cout << a[i] << " " << a[i + 1] << '\n';
-                        found = true;
-                        break;
-                    }
-                    if (i + 2 < n && (a[i + 2] % a[i]) % 2 == 0)
-                    {
-                        cout << a[i] << " " << a[i + 2] << '\n';
-                        found = true;
-                        break;
-                    }
-                }
-            }
-
-            if (!found)
-            {
-                cout << -1 << '\n';
-            }
+        if (!found)
+        {
+            cout << -1 << '\n';
         }
     }
 
