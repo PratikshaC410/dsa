@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include <string>
+#include <map>
 
 using namespace std;
 
@@ -14,21 +14,35 @@ void solve()
         cin >> a[i];
     }
 
-    string target = "01032025";
-    int target_ptr = 0;
+    map<int, int> required;
+    required[0] = 3;
+    required[1] = 1;
+    required[2] = 2;
+    required[3] = 1;
+    required[5] = 1;
+
+    map<int, int> current_counts;
 
     for (int i = 0; i < n; ++i)
     {
-        char current_char = '0' + a[i];
+        current_counts[a[i]]++;
 
-        if (current_char == target[target_ptr])
+        bool possible = true;
+        for (auto const &pair : required)
         {
-            target_ptr++;
+            int digit = pair.first;
+            int needed_count = pair.second;
+
+            if (current_counts[digit] < needed_count)
+            {
+                possible = false;
+                break;
+            }
         }
 
-        if (target_ptr == 8)
+        if (possible)
         {
-            cout << i + 1 << "\n"; // 1-based index of the step
+            cout << i + 1 << "\n";
             return;
         }
     }
@@ -38,7 +52,6 @@ void solve()
 
 int main()
 {
-    // Fast I/O
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
 
