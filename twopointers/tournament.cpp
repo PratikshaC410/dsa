@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
 
 using namespace std;
 
@@ -10,38 +9,38 @@ void solve()
     cin >> n >> j >> k;
 
     vector<int> a(n);
-    int max_strength = 0;
     for (int i = 0; i < n; ++i)
     {
         cin >> a[i];
-        if (a[i] > max_strength)
+    }
+
+    // Player j's strength (1-based to 0-based indexing)
+    int target_strength = a[j - 1];
+
+    // Count how many players are strictly stronger than player j
+    int strictly_stronger = 0;
+    for (int i = 0; i < n; ++i)
+    {
+        if (a[i] > target_strength)
         {
-            max_strength = a[i];
+            strictly_stronger++;
         }
     }
 
-    // Player j is at index j - 1
-    int target_strength = a[j - 1];
-
-    if (k > 1)
+    // Player j can survive if the number of strictly stronger players is less than k
+    if (strictly_stronger < k)
     {
         cout << "YES\n";
     }
     else
-    { // k == 1
-        if (target_strength == max_strength)
-        {
-            cout << "YES\n";
-        }
-        else
-        {
-            cout << "NO\n";
-        }
+    {
+        cout << "NO\n";
     }
 }
 
 int main()
 {
+    // Optimize standard I/O operations for performance
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
 
