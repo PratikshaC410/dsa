@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include <set>
+#include <algorithm>
 
 using namespace std;
 
@@ -10,40 +10,38 @@ void solve()
     cin >> n >> j >> k;
 
     vector<int> a(n);
+    int max_strength = 0;
     for (int i = 0; i < n; ++i)
     {
         cin >> a[i];
-    }
-
-    int target_strength = a[j - 1];
-
-    // Collect all distinct strengths strictly greater than player j's strength
-    set<int> distinct_stronger;
-    for (int i = 0; i < n; ++i)
-    {
-        if (a[i] > target_strength)
+        if (a[i] > max_strength)
         {
-            distinct_stronger.insert(a[i]);
+            max_strength = a[i];
         }
     }
 
-    // U is the number of unique strictly greater strengths
-    int U = distinct_stronger.size();
+    // Player j is at index j - 1
+    int target_strength = a[j - 1];
 
-    // Player j needs U + 1 spots to be guaranteed a place among the survivors
-    if (U + 1 <= k)
+    if (k > 1)
     {
         cout << "YES\n";
     }
     else
-    {
-        cout << "NO\n";
+    { // k == 1
+        if (target_strength == max_strength)
+        {
+            cout << "YES\n";
+        }
+        else
+        {
+            cout << "NO\n";
+        }
     }
 }
 
 int main()
 {
-    // Fast I/O
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
 
