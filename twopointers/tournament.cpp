@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <set>
 
 using namespace std;
 
@@ -14,21 +15,23 @@ void solve()
         cin >> a[i];
     }
 
-    // Player j is at index j - 1 (1-based to 0-based indexing)
     int target_strength = a[j - 1];
 
-    int strictly_stronger = 0;
+    // Collect all distinct strengths strictly greater than player j's strength
+    set<int> distinct_stronger;
     for (int i = 0; i < n; ++i)
     {
         if (a[i] > target_strength)
         {
-            strictly_stronger++;
+            distinct_stronger.insert(a[i]);
         }
     }
 
-    // If the number of strictly stronger players is less than k,
-    // player j can be in the top k.
-    if (strictly_stronger < k)
+    // U is the number of unique strictly greater strengths
+    int U = distinct_stronger.size();
+
+    // Player j needs U + 1 spots to be guaranteed a place among the survivors
+    if (U + 1 <= k)
     {
         cout << "YES\n";
     }
