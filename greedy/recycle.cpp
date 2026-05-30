@@ -4,6 +4,8 @@
 
 using namespace std;
 
+const int INF = 1e9;
+
 void solve()
 {
     int n;
@@ -16,29 +18,52 @@ void solve()
         cin >> a[i];
     }
 
-    sort(a.rbegin(), a.rend());
+    sort(a.begin(), a.end());
 
-    int coins = 0;
+    vector<int> dp(n + 1, INF);
+    dp[0] = 0;
+
     for (int i = 0; i < n; ++i)
     {
-        long long current_weight = a[i];
-
-        for (int j = 0; j < i; ++j)
+        vector<int> next_dp(n + 1, INF);
+        for (int j = 0; j <= i; ++j)
         {
-            if (current_weight > c)
+            if (dp[j] == INF)
+                continue;
+
+            next_dp[j] = min(next_dp[j], dp[j] + 1);
+
+            long long current_weight = a[i];
+            bool overflow = false;
+            for (int k = 0; k < j; ++k)
             {
-                break;
+                if (current_weight > c)
+                {
+                    overflow = true;
+                    break;
+                }
+                current_weight *= 2;
             }
-            current_weight *= 2;
-        }
 
-        if (current_weight > c)
-        {
-            coins++;
+            if (!overflow && current_weight <= c)
+            {
+                next_dp[j + 1] = min(next_dp[j + 1], dp[j]);
+            }
+            else
+            {
+                next_dp[j + 1] = min(next_dp[j + 1], dp[j] + 1);
+            }
         }
+        dp = move(next_dp);
     }
 
-    cout << coins << "\n";
+    int ans = INF;
+    for (int j = 0; j <= n; ++j)
+    {
+        ans = min(ans, dp[j]);
+    }
+
+    cout << ans << "\n";
 }
 
 int main()
