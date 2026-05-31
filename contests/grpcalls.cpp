@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include <map>
 
 using namespace std;
 
@@ -9,20 +8,29 @@ void solve()
 {
     int n;
     cin >> n;
+    vector<int> a(n);
+    for (int i = 0; i < n; i++)
+    {
+        cin >> a[i];
+    }
 
-    map<int, int> freq;
-    int max_freq = 0;
+    sort(a.begin(), a.end());
+
+    int min_calls = n;
 
     for (int i = 0; i < n; i++)
     {
-        int val;
-        cin >> val;
-        freq[val]++;
-        max_freq = max(max_freq, freq[val]);
+        // L: count of elements strictly less than a[i]
+        int L = lower_bound(a.begin(), a.end(), a[i]) - a.begin();
+
+        // R: count of elements strictly greater than a[i]
+        int R = a.end() - upper_bound(a.begin(), a.end(), a[i]);
+
+        int current_calls = max(L, R);
+        min_calls = min(min_calls, current_calls);
     }
 
-    // The beautiful optimal solution
-    cout << min(n / 2, n - max_freq) << "\n";
+    cout << min_calls << "\n";
 }
 
 int main()
