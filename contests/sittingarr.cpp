@@ -11,66 +11,62 @@ void solve()
     cin >> n >> x >> s;
     string u;
     cin >> u;
-
-    vector<int> dp(x + 1, -1);
-    dp[0] = 0;
-
-    int min_j = 0;
-    int max_j = 0;
+    long long opened_tables = 0;
+    long long total_seated = 0;
+    long long empty_seats = 0;
+    long long ambiverts_used_as_introverts = 0;
 
     for (int i = 0; i < n; i++)
     {
         char p = u[i];
 
-        int prev_max_j = max_j;
-        if (p == 'I' && max_j < x)
+        if (p == 'I')
         {
-            max_j++;
-        }
-        else if (p == 'A' && max_j < x)
-        {
-            max_j++;
-        }
-
-        for (int j = max_j; j >= min_j; j--)
-        {
-            int res = dp[j];
-
-            if (j > 0 && (p == 'I' || p == 'A'))
+            if (opened_tables < x)
             {
-                if (dp[j - 1] != -1)
+                opened_tables++;
+                total_seated++;
+                empty_seats += (s - 1);
+            }
+        }
+        else if (p == 'E')
+        {
+            if (empty_seats > 0)
+            {
+                empty_seats--;
+                total_seated++;
+            }
+            else if (ambiverts_used_as_introverts > 0)
+            {
+                ambiverts_used_as_introverts--;
+                opened_tables--;
+                empty_seats -= (s - 1);
+
+                if (empty_seats > 0)
                 {
-                    res = max(res, dp[j - 1] + 1);
+                    empty_seats--;
+                    total_seated++;
                 }
             }
-            if (p == 'E' || p == 'A')
-            {
-                if (dp[j] != -1)
-                {
-                    int available_seats = (j * s) - dp[j];
-                    if (available_seats > 0)
-                    {
-                        res = max(res, dp[j] + 1);
-                    }
-                }
-            }
-
-            dp[j] = res;
         }
-
-        while (min_j <= max_j && dp[min_j] == -1)
+        else
         {
-            min_j++;
+            if (opened_tables < x)
+            {
+                opened_tables++;
+                total_seated++;
+                empty_seats += (s - 1);
+                ambiverts_used_as_introverts++;
+            }
+            else if (empty_seats > 0)
+            {
+                empty_seats--;
+                total_seated++;
+            }
         }
     }
 
-    int max_seated = 0;
-    for (int j = 0; j <= x; j++)
-    {
-        max_seated = max(max_seated, dp[j]);
-    }
-
-    cout << max_seated << "\n";
+    cout << total_seated << "\n";
 }
 
 int main()
