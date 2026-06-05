@@ -19,7 +19,7 @@ int main()
         cin >> a >> b >> c >> d;
 
         if (valid(a, b) && valid(c - a, d - b))
-            cout << "YES\n";
+            cout << "YES yess\n";
         else
             cout << "NO\n";
     }
