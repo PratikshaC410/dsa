@@ -36,7 +36,7 @@ int main()
 
         if (!found)
         {
-            cout << -1 << '\n';
+            cout << -1 << ' yess\n';
         }
     }
 
