@@ -33,7 +33,7 @@ void solve()
         }
         if (found_coprime)
         {
-            cout << p << "\n";
+            cout << p << " its a prime\n";
             return;
         }
     }
