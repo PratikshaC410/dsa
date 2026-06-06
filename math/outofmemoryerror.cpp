@@ -9,10 +9,10 @@ void solve()
     long long h;
     cin >> n >> m >> h;
 
-    vector<long long> original_a(n + 1);
+    vector<long long> a(n + 1);
     for (int i = 1; i <= n; ++i)
     {
-        cin >> original_a[i];
+        cin >> a[i];
     }
 
     vector<pair<int, long long>> ops(m + 1);
@@ -21,34 +21,49 @@ void solve()
         cin >> ops[i].first >> ops[i].second;
     }
 
-    vector<long long> current_a = original_a;
-    int last_crash_idx = 0;
+    // tracks the operation index when the array was last reset for each element
+    vector<int> last_reset_at(n + 1, 0);
+    // tracks the accumulated value added to an element SINCE its last reset
+    vector<long long> added_since_reset(n + 1, 0);
 
+    int global_last_crash = 0;
+
+    //  Find the absolute final crash point
     for (int i = 1; i <= m; ++i)
     {
         int idx = ops[i].first;
         long long val = ops[i].second;
 
-        current_a[idx] += val;
-
-        if (current_a[idx] > h)
+        // If the last global crash happened AFTER this specific element was touched,
+        // it means this element was virtually reset to original. We must clear its history.
+        if (last_reset_at[idx] < global_last_crash)
         {
-            last_crash_idx = i;
+            added_since_reset[idx] = 0;
+            last_reset_at[idx] = global_last_crash;
+        }
 
-            current_a = original_a;
+        // Add the current operation's value to its history since the last crash
+        added_since_reset[idx] += val;
+
+        // Check if the original value + everything added since the last crash exceeds h
+        if (a[idx] + added_since_reset[idx] > h)
+        {
+            global_last_crash = i;      // Mark this as the latest global crash
+            added_since_reset[idx] = 0; // Since it crashed, this element resets immediately
+            last_reset_at[idx] = i;     // Update its local tracking timestamp
         }
     }
 
-    for (int i = last_crash_idx + 1; i <= m; ++i)
+    for (int i = global_last_crash + 1; i <= m; ++i)
     {
         int idx = ops[i].first;
         long long val = ops[i].second;
-        original_a[idx] += val;
+        a[idx] += val;
     }
 
     for (int i = 1; i <= n; ++i)
     {
-        cout << original_a[i] << (i == n ? "" : " ");
+        cout << a[i] << (i == n ? "" : " ");
     }
     cout << "\n";
 }
