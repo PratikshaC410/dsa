@@ -31,7 +31,7 @@ void solve()
             {
                 if (path[j] != path[j + 1])
                 {
-                    has_staircase_path = true;
+                    has_staircase = true;
                 }
             }
         }
@@ -40,7 +40,7 @@ void solve()
     long long ans = 1;
     long long MOD = 1000000007;
 
-    if (has_staircase_path)
+    if (has_staircase)
     {
         cout << 1 << "\n";
         return;
