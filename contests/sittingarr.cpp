@@ -11,10 +11,14 @@ void solve()
     cin >> n >> x >> s;
     string u;
     cin >> u;
-    long long opened_tables = 0;
+
+    // Track total capacities directly
+    long long open_tables = 0;
     long long total_seated = 0;
-    long long empty_seats = 0;
-    long long ambiverts_used_as_introverts = 0;
+    long long available_seats = 0;
+
+    // Number of tables opened by an 'A' that can be given up later
+    long long flexible_tables = 0;
 
     for (int i = 0; i < n; i++)
     {
@@ -22,47 +26,60 @@ void solve()
 
         if (p == 'I')
         {
-            if (opened_tables < x)
+            if (open_tables < x)
             {
-                opened_tables++;
+                open_tables++;
                 total_seated++;
-                empty_seats += (s - 1);
+                available_seats += (s - 1);
+            }
+            else if (flexible_tables > 0)
+            {
+                // Regret: An Ambivert opened a table, but a strict Introvert needs it more.
+                // Convert that past Ambivert into an Extrovert, giving their table slot to this 'I'.
+                flexible_tables--;
+                available_seats--;          // Past 'A' now consumes a seat
+                total_seated++;             // This 'I' sits down
+                available_seats += (s - 1); // New table brings seats
             }
         }
         else if (p == 'E')
         {
-            if (empty_seats > 0)
+            if (available_seats > 0)
             {
-                empty_seats--;
+                available_seats--;
                 total_seated++;
-            }
-            else if (ambiverts_used_as_introverts > 0)
-            {
-                ambiverts_used_as_introverts--;
-                opened_tables--;
-                empty_seats -= (s - 1);
-
-                if (empty_seats > 0)
-                {
-                    empty_seats--;
-                    total_seated++;
-                }
             }
         }
         else
+        { // p == 'A'
+            // Ambiverts always prefer opening a table if slots are open,
+            // because a table adds s-1 seats for future Extroverts.
+            if (open_tables < x && s > 1)
+            {
+                open_tables++;
+                total_seated++;
+                available_seats += (s - 1);
+                flexible_tables++;
+            }
+            else if (available_seats > 0)
+            {
+                available_seats--;
+                total_seated++;
+            }
+            else if (open_tables < x)
+            {
+                // Even if s == 1, open a table if we have no other options
+                open_tables++;
+                total_seated++;
+                available_seats += (s - 1);
+            }
+        }
+
+        // If conversions caused a seat deficit, correct it immediately
+        if (available_seats < 0)
         {
-            if (opened_tables < x)
-            {
-                opened_tables++;
-                total_seated++;
-                empty_seats += (s - 1);
-                ambiverts_used_as_introverts++;
-            }
-            else if (empty_seats > 0)
-            {
-                empty_seats--;
-                total_seated++;
-            }
+            total_seated = total_seated + available_seats;
+            available_seats = 0;
         }
     }
 
@@ -71,6 +88,7 @@ void solve()
 
 int main()
 {
+    // Crucial for performance on large 200,000 stream scales
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
 
