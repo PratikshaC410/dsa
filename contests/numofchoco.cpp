@@ -36,6 +36,9 @@ int main() {
             if (n % 2 != 0) n++;  
             cout << (n / 2) * 5 << endl;
         }
+        else{
+            cout<<""<<endl;
+        }
     }
 
     return 0;
