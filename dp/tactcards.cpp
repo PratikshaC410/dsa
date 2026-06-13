@@ -15,19 +15,24 @@ void solve()
     for (int i = 0; i < n; ++i)
         cin >> b[i];
 
-    long long max_total_score = 0;
+    // dp[0] stores max value if incoming multiplier is +1
+    // dp[1] stores max value if incoming multiplier is -1
+    // Base case for after the last turn (index n)
+    long long next_dp_pos = 0;
+    long long next_dp_neg = 0;
 
-    for (int i = 0; i < n; ++i)
+    // Move backwards from the final turn to the first turn
+    for (int i = n - 1; i >= 0; --i)
     {
-        long long sign = ((n - 1 - i) % 2 == 0) ? 1 : -1;
+        long long cur_dp_pos = max(-a[i] + next_dp_pos, b[i] + next_dp_neg);
+        long long cur_dp_neg = max(a[i] + next_dp_neg, -b[i] + next_dp_pos);
 
-        long long red_contribution = -sign * a[i];
-        long long blue_contribution = sign * b[i];
-
-        max_total_score += max(red_contribution, blue_contribution);
+        next_dp_pos = cur_dp_pos;
+        next_dp_neg = cur_dp_neg;
     }
 
-    cout << max_total_score << "\n";
+    // Since the game starts with score 0 (which has a positive sign context)
+    cout << next_dp_pos << "\n";
 }
 
 int main()
