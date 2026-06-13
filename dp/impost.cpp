@@ -33,7 +33,7 @@ void solve()
         dp_u = next_dp_u;
     }
 
-    cout << dp_s << "\n";
+    cout << dp_s << " dp_s will be \n";
 }
 
 int main()
