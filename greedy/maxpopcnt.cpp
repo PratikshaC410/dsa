@@ -3,37 +3,26 @@ using namespace std;
 
 #define int long long
 
-signed main()
+int main()
 {
 
     int t;
     cin >> t;
 
-    while (t--)
+    long long ans = 0;
+    long long cost = 1;
+
+    while (cost <= n)
     {
-        int n, k;
-        cin >> n >> k;
+        long long take = min(1LL * k, n / cost);
 
-        priority_queue<int, vector<int>, greater<int>> pq;
+        ans += take;
+        n -= take * cost;
 
-        for (int i = 0; i < k; i++)
-            pq.push(1);
-
-        int ans = 0;
-
-        while (!pq.empty() && pq.top() <= n)
-        {
-            int cost = pq.top();
-            pq.pop();
-
-            n -= cost;
-            ans++;
-
-            pq.push(cost * 2);
-        }
-
-        cout << ans << '\n';
+        cost <<= 1;
     }
+
+    cout << ans << '\n';
 
     return 0;
 }
