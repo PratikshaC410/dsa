@@ -1,44 +1,52 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <numeric>
+
 using namespace std;
 
-using ll = long long;
+void solve()
+{
+    int n;
+    cin >> n;
+    vector<long long> a(n + 1);
+    for (int i = 1; i <= n; ++i)
+    {
+        cin >> a[i];
+    }
+
+    vector<int> operations;
+    int flip_count = 0;
+
+    for (int i = n; i >= 1; --i)
+    {
+        long long current_val = a[i];
+        if (flip_count % 2 != 0)
+        {
+            current_val = -current_val;
+        }
+
+        if (current_val > 0)
+        {
+            operations.push_back(i);
+            flip_count++;
+        }
+    }
+
+    cout << operations.size() << "\n";
+    for (int i = 0; i < operations.size(); ++i)
+    {
+        cout << operations[i] << (i == operations.size() - 1 ? "" : " ");
+    }
+    cout << "\n";
+}
 
 int main()
 {
-
-    int T;
-    cin >> T;
-
-    while (T--)
+    int t;
+    cin >> t;
+    while (t--)
     {
-        int n;
-        cin >> n;
-
-        vector<ll> a(n + 1);
-        for (int i = 1; i <= n; i++)
-            cin >> a[i];
-
-        vector<int> ans;
-        int flip = 0;
-
-        for (int i = n; i >= 1; i--)
-        {
-            ll cur = (flip ? -a[i] : a[i]);
-
-            if (cur > 0)
-            {
-                ans.push_back(i);
-                flip ^= 1;
-            }
-        }
-
-        reverse(ans.begin(), ans.end());
-
-        cout << ans.size() << "\n";
-        for (int x : ans)
-            cout << x << " ";
-        cout << "\n";
+        solve();
     }
-
     return 0;
 }
