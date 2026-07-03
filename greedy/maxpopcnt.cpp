@@ -3,26 +3,34 @@ using namespace std;
 
 #define int long long
 
-int main()
+signed main()
 {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
 
     int t;
     cin >> t;
 
-    long long ans = 0;
-    long long cost = 1;
-
-    while (cost <= n)
+    while (t--)
     {
-        long long take = min(1LL * k, n / cost);
+        int n, k;
+        cin >> n >> k;
 
-        ans += take;
-        n -= take * cost;
+        int ans = 0;
+        int cost = 1;
 
-        cost <<= 1;
+        while (cost <= n)
+        {
+            int take = min(k, n / cost);
+
+            ans += take;
+            n -= take * cost;
+
+            cost <<= 1;
+        }
+
+        cout << ans << "\n";
     }
-
-    cout << ans << '\n';
 
     return 0;
 }
